@@ -71,9 +71,10 @@ public final class TMan extends ComponentDefinition {
         @Override
         public void handle(TManSchedule event) {
             Snapshot.updateTManPartners(self, tmanPartners);
-
+            // triggers the active Tman thread
             // Publish sample to connected components
-            trigger(new TManSample(tmanPartners), tmanPartnersPort);            
+            trigger(new TManSample(tmanPartners), tmanPartnersPort); // return the tman result up to the search component
+            
         }
     };
 //-------------------------------------------------------------------	
@@ -81,23 +82,42 @@ public final class TMan extends ComponentDefinition {
         @Override
         public void handle(CyclonSample event) {
             ArrayList<PeerAddress> cyclonPartners = event.getSample();
-
-            // merge cyclonPartners into TManPartners
+            // ACTIVE thread
+            // wait delta
+            // p <-- selectPeer
+            // BUFFER <-- merge
+            // BUFFER <-- rank
+            // send first m entries of buffer to p: trugger <ExchangeMsg.Request>
         }
     };
 //-------------------------------------------------------------------	
     Handler<ExchangeMsg.Request> handleTManPartnersRequest = new Handler<ExchangeMsg.Request>() {
         @Override
         public void handle(ExchangeMsg.Request event) {
-
+            // PASSIVE thread lines 1-5
+            // BUFFER <-- merge
+            // BUFFER <-- rank
+            // send first m entries of buffer to q: trugger <ExchangeMsg.Reponse>
+            // view <-- merge(biffeer, view) (View = TmanPartners)
         }
     };
     
     Handler<ExchangeMsg.Response> handleTManPartnersResponse = new Handler<ExchangeMsg.Response>() {
         @Override
         public void handle(ExchangeMsg.Response event) {
-
+            // ACTIVE THREAD
+            // "Receive buffer p forn P"
+            // view <-- merge (bufferP, view)
         }
     };
+    
+    // implement rank
+    // implement merge
+    // implement selectPeer
+    
+    //Method SELECTPEER selects a
+    //random sample among the first w entries in the ordered list
+    //given as its second parameter.
+
 
 }

@@ -229,6 +229,7 @@ public final class Search extends ComponentDefinition {
             // receive a new list of neighbours
             ArrayList<PeerAddress> sampleNodes = event.getSample();
             // Pick a node or more, and exchange index with them
+            // need to implement an index update function
         }
     };
 }
